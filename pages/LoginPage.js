@@ -12,15 +12,23 @@ class LoginPage {
   }
 
   async goto() {
-    await this.page.goto('/');
-  }
+    await this.page.goto('/', { 
+      waitUntil: 'domcontentloaded',  // 'load' ki jagah yeh use karo
+      timeout: 60000 
+    });
+}
 
   async login(username, password) {
-    await this.loginNavLink.click();
+    // Firefox ke liye force click use karo
+    await this.loginNavLink.click({ force: true });
+    
+    // Modal open hone ka wait karo
+    await this.page.waitForSelector('#loginusername', { state: 'visible' });
+    
     await this.usernameInput.fill(username);
     await this.passwordInput.fill(password);
     await this.loginButton.click();
-  }
+}
 
   async logout() {
     await this.logoutLink.click();
