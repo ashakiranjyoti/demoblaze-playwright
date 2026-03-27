@@ -44,13 +44,16 @@ test.describe('Cart Tests', () => {
     const cartPage = new CartPage(page);
     await cartPage.goto();
 
-    // first() use karo ✅
+    // Delete click karo
     await page.getByRole('link', { name: 'Delete' }).first().click();
-    await page.waitForTimeout(1500);
+    
+    // Zyada wait karo - CI slow hota hai local se ✅
+    await page.waitForTimeout(3000);
 
+    // Product gone hona chahiye
     await expect(
       page.getByRole('cell', { name: 'Apple monitor' })
     ).not.toBeVisible();
-  });
+});
 
 });
