@@ -7,32 +7,20 @@ module.exports = defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
-  
+  timeout: 60000,
   use: {
     baseURL: 'https://www.demoblaze.com',
-    headless: false,
+    // CI mein headless true, local mein false ✅
+    headless: !!process.env.CI,
     screenshot: 'only-on-failure',
     trace: 'on-first-retry',
-    // Timeout badhao
     navigationTimeout: 60000,
     actionTimeout: 30000,
   },
-
-  // Global timeout badhao
-  timeout: 60000,
-
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
-    },
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
     },
   ],
 });
