@@ -23,16 +23,23 @@ class CartPage {
   }
 
   async clearCart() {
-    // Direct cart URL pe jao
     await this.page.goto('/#/cart');
-    await this.page.waitForTimeout(1500);
+    await this.page.waitForTimeout(3000); // CI ke liye zyada wait
     
-    // Jab tak Delete buttons hain tab tak delete karte raho
-    while (await this.page.getByRole('link', { name: 'Delete' }).first().isVisible()
-      .catch(() => false)) {
+    // Kitne delete buttons hain pehle count karo
+    const deleteButtons = this.page.getByRole('link', { name: 'Delete' });
+    const count = await deleteButtons.count();
+    
+    // Ek ek karke sab delete karo
+    for (let i = 0; i < count; i++) {
         await this.page.getByRole('link', { name: 'Delete' }).first().click();
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(2000); // Har delete ke baad wait
     }
+    
+    // Home pe wapas jao
+    await this.page.goto('/');
+    await this.page.waitForTimeout(2000);
+}
     
     // Home pe wapas jao ✅
     await this.page.goto('/');
