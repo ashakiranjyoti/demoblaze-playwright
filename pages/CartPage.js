@@ -2,10 +2,7 @@ class CartPage {
   constructor(page) {
     this.page = page;
 
-    // Cart link
     this.cartLink = page.getByRole('link', { name: 'Cart', exact: true });
-    
-    // Place order button
     this.placeOrderButton = page.getByRole('button', { name: 'Place Order' });
   }
 
@@ -15,7 +12,7 @@ class CartPage {
   }
 
   async isProductInCart(productName) {
-    return page.getByRole('cell', { name: productName });
+    return this.page.getByRole('cell', { name: productName });
   }
 
   async placeOrder() {
@@ -24,27 +21,19 @@ class CartPage {
 
   async clearCart() {
     await this.page.goto('/#/cart');
-    await this.page.waitForTimeout(3000); // CI ke liye zyada wait
-    
-    // Kitne delete buttons hain pehle count karo
+    await this.page.waitForTimeout(3000);
+
     const deleteButtons = this.page.getByRole('link', { name: 'Delete' });
     const count = await deleteButtons.count();
-    
-    // Ek ek karke sab delete karo
+
     for (let i = 0; i < count; i++) {
-        await this.page.getByRole('link', { name: 'Delete' }).first().click();
-        await this.page.waitForTimeout(2000); // Har delete ke baad wait
+      await this.page.getByRole('link', { name: 'Delete' }).first().click();
+      await this.page.waitForTimeout(2000);
     }
-    
-    // Home pe wapas jao
+
     await this.page.goto('/');
     await this.page.waitForTimeout(2000);
-}
-    
-    // Home pe wapas jao ✅
-    await this.page.goto('/');
-    await this.page.waitForTimeout(1000);
-}
+  }
 }
 
 module.exports = { CartPage };
