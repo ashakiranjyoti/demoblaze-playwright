@@ -31,8 +31,16 @@ class LoginPage {
 }
 
   async logout() {
+    // Pehle check karo modal hai ya nahi
+    const modal = await this.page.$('#orderModal');
+    if (modal) {
+        await this.page.evaluate(() => {
+            document.querySelector('#orderModal')?.remove();
+            document.querySelector('.modal-backdrop')?.remove();
+        });
+    }
     await this.logoutLink.click();
-  }
+}
 
   async getLoginLink() {
     return this.page.getByRole('link', { name: 'Log in' });
